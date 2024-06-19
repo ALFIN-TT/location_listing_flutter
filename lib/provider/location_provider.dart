@@ -38,7 +38,14 @@ class LocationProvider extends ChangeNotifier {
   }
 
   searchResults(String query) {
-    _filteredLocations = locations?.locations?.where((item) => item!.location!.toLowerCase().contains(query.toLowerCase())).toList();
-    notifyListeners();
+    print('query: $query');
+      if(query.isNotEmpty) {
+        _filteredLocations = _locations?.locations?.where((item) =>
+          item!.location!.toLowerCase().contains(query.toLowerCase())).toList();
+
+    } else {
+        _filteredLocations = _locations?.locations;
+    }
+      notifyListeners();
   }
 }
