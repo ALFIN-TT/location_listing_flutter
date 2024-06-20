@@ -40,21 +40,21 @@ class LocationDetailsPage extends StatelessWidget {
             ),
             ListTile(
               title: Text('Phone'),
-              subtitle: Text(location.phone ?? ''),
+              subtitle: Text(location.phone ?? 'N/A'),
               trailing: Icon(Icons.phone),
             ),
             ListTile(
               title: Text('Email'),
-              subtitle: Text(location.email ?? ''),
+              subtitle: Text(location.email ?? 'N/A'),
               trailing: Icon(Icons.email),
             ),
             ListTile(
               title: Text('Address'),
-              subtitle: Text(location.address ?? ''),
+              subtitle: Text(location.address ?? 'N/A'),
             ),
             ListTile(
               title: Text('Office Type'),
-              subtitle: Text(location.officeType?.firstOrNull ?? ''),
+              subtitle: Text(location.officeType?.firstOrNull ?? 'N/A'),
             ),
           ],
         ));
