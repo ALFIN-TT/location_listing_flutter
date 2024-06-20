@@ -20,6 +20,46 @@ class MyHomePageState extends State<MyHomePage> {
   final String title;
   TextEditingController editingController = TextEditingController();
 
+  Future<void> _showFilters(
+      BuildContext context, LocationProvider dataProvider) async {
+    int? result = await showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      isDismissible: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(15)),
+      ),
+      builder: (context) => DraggableScrollableSheet(
+        initialChildSize: 0.4,
+        minChildSize: 0.2,
+        maxChildSize: 0.9,
+        expand: false,
+        builder: (context, scrollController) => SafeArea(
+          child: ListView.builder(
+              controller: scrollController,
+              itemCount: dataProvider.locationFilter?.length,
+              itemBuilder: (context, index) {
+                final location = dataProvider.locationFilter?[index];
+                return Column(children: [
+                  ListTile(
+                    trailing: dataProvider.selectedFilter.name == location?.name
+                        ? const Icon(Icons.brightness_low_sharp)
+                        : const SizedBox.shrink(),
+                    title: Text(location?.name ?? ""),
+                    onTap: () {
+                      dataProvider.applyFilter(location!);
+                      Navigator.of(context).pop(index);
+                    },
+                  ),
+                  Divider()
+                ]);
+              }),
+        ),
+      ),
+    );
+    print(result);
+  }
+
   @override
   Widget build(BuildContext context) {
     TextEditingController searchTextEditingController = TextEditingController();
@@ -51,24 +91,53 @@ class MyHomePageState extends State<MyHomePage> {
                                 child: Column(children: [
                                   Padding(
                                     padding: const EdgeInsets.all(8.0),
-                                    child: TextField(
-                                      textAlign: TextAlign.left,
-                                      onChanged: (query) {
-                                        dataProvider.searchResults(query);
-                                      },
-                                      controller: searchTextEditingController,
-                                      decoration: const InputDecoration(
-                                          focusedBorder: OutlineInputBorder(
-                                            borderSide: BorderSide(
-                                                color: Colors.black,
-                                                width: 2.0),
+                                    child: Row(
+                                      children: <Widget>[
+                                        Expanded(
+                                          child: TextField(
+                                            controller:
+                                                searchTextEditingController,
+                                            decoration: const InputDecoration(
+                                                contentPadding:
+                                                    EdgeInsets.all(10),
+                                                focusedBorder:
+                                                    OutlineInputBorder(
+                                                  borderSide: BorderSide(
+                                                      color: Colors.black,
+                                                      width: 2.0),
+                                                ),
+                                                enabledBorder:
+                                                    OutlineInputBorder(
+                                                  borderSide: BorderSide(
+                                                      color: Colors.black54,
+                                                      width: 2.0),
+                                                ),
+                                                hintText: 'Search here...'),
+                                            onChanged: (query) {
+                                              dataProvider.searchResults(query);
+                                            },
                                           ),
-                                          enabledBorder: OutlineInputBorder(
-                                            borderSide: BorderSide(
-                                                color: Colors.black54,
-                                                width: 2.0),
-                                          ),
-                                          hintText: 'Search here...'),
+                                        ),
+                                        TextButton(
+                                          onPressed: () {
+                                            dataProvider.applyFilter(LocationFilter(name: 'All', isSelected: true));
+                                          },
+                                          child: Text('All'),
+                                          style: TextButton.styleFrom(
+                                              padding: EdgeInsets.zero,
+                                              minimumSize: Size(30, 30),
+                                              tapTargetSize:
+                                                  MaterialTapTargetSize.padded,
+                                              alignment: Alignment.center),
+                                        ),
+                                        IconButton(
+                                            icon: const Icon(
+                                                Icons.filter_list_outlined),
+                                            onPressed: () {
+                                              _showFilters(
+                                                  context, dataProvider);
+                                            }),
+                                      ],
                                     ),
                                   ),
                                   if (dataProvider.filteredLocations?.isEmpty ==

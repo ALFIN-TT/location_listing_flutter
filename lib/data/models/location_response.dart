@@ -24,14 +24,13 @@ class Constants {
   final String? mailUs;
   final String? defaultDropdownValue;
 
-  Constants(this.getDirection, this.findOutMore,
-      this.contactUs, this.mailUs, this.defaultDropdownValue);
+  Constants(this.getDirection, this.findOutMore, this.contactUs, this.mailUs,
+      this.defaultDropdownValue);
 
   factory Constants.fromJson(Map<String, dynamic> json) =>
       _$ConstantsFromJson(json);
 
-  Map<String, dynamic> toJson() =>
-      _$ConstantsToJson(this);
+  Map<String, dynamic> toJson() => _$ConstantsToJson(this);
 }
 
 @JsonSerializable()
@@ -42,8 +41,7 @@ class Bounds {
 
   Bounds(this.breakPoint, this.zoom, this.bounds);
 
-  factory Bounds.fromJson(Map<String, dynamic> json) =>
-      _$BoundsFromJson(json);
+  factory Bounds.fromJson(Map<String, dynamic> json) => _$BoundsFromJson(json);
 
   Map<String, dynamic> toJson() => _$BoundsToJson(this);
 }
@@ -55,15 +53,12 @@ class BoundsDetails {
   final double? north;
   final int? east;
 
-  BoundsDetails(
-      this.south, this.west, this.north, this.east);
+  BoundsDetails(this.south, this.west, this.north, this.east);
 
-  factory BoundsDetails.fromJson(
-          Map<String, dynamic> json) =>
+  factory BoundsDetails.fromJson(Map<String, dynamic> json) =>
       _$BoundsDetailsFromJson(json);
 
-  Map<String, dynamic> toJson() =>
-      _$BoundsDetailsToJson(this);
+  Map<String, dynamic> toJson() => _$BoundsDetailsToJson(this);
 }
 
 @JsonSerializable()
@@ -98,8 +93,7 @@ class Location {
   factory Location.fromJson(Map<String, dynamic> json) =>
       _$LocationFromJson(json);
 
-  Map<String, dynamic> toJson() =>
-      _$LocationToJson(this);
+  Map<String, dynamic> toJson() => _$LocationToJson(this);
 }
 
 @JsonSerializable()
@@ -109,12 +103,10 @@ class Geometry {
 
   Geometry(this.lat, this.lng);
 
-  factory Geometry.fromJson(
-          Map<String, dynamic> json) =>
+  factory Geometry.fromJson(Map<String, dynamic> json) =>
       _$GeometryFromJson(json);
 
-  Map<String, dynamic> toJson() =>
-      _$GeometryToJson(this);
+  Map<String, dynamic> toJson() => _$GeometryToJson(this);
 }
 
 @JsonSerializable()
@@ -124,10 +116,20 @@ class Websites {
 
   Websites(this.name, this.url);
 
-  factory Websites.fromJson(
-          Map<String, dynamic> json) =>
+  factory Websites.fromJson(Map<String, dynamic> json) =>
       _$WebsitesFromJson(json);
 
-  Map<String, dynamic> toJson() =>
-      _$WebsitesToJson(this);
+  Map<String, dynamic> toJson() => _$WebsitesToJson(this);
+}
+
+class LocationFilter {
+  final String? name;
+  final bool? isSelected;
+
+  LocationFilter({required this.name, this.isSelected = false});
+
+  @override
+  String toString() {
+    return 'name : $name \n isSelected : $isSelected';
+  }
 }
