@@ -94,6 +94,11 @@ class Location {
       _$LocationFromJson(json);
 
   Map<String, dynamic> toJson() => _$LocationToJson(this);
+
+  @override
+  String toString() {
+    return area.toString();
+  }
 }
 
 @JsonSerializable()
@@ -120,16 +125,4 @@ class Websites {
       _$WebsitesFromJson(json);
 
   Map<String, dynamic> toJson() => _$WebsitesToJson(this);
-}
-
-class LocationFilter {
-  final String? name;
-  final bool? isSelected;
-
-  LocationFilter({required this.name, this.isSelected = false});
-
-  @override
-  String toString() {
-    return 'name : $name \n isSelected : $isSelected';
-  }
 }

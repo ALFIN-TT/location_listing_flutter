@@ -2,20 +2,22 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_assignment/data/models/location_response.dart';
 import 'package:flutter_assignment/data/repository/repository.dart';
 
+const locationFilterAll = 'All';
+
 class LocationProvider extends ChangeNotifier {
   final Repository repository;
 
   LocationProvider({required this.repository}) {
-    loadData();
+    _loadData();
   }
 
   LocationResponse? _locations;
   bool _isLoading = false;
   String _errorMessage = "";
   List<Location?>? _filteredLocations;
-  List<LocationFilter> _locationFilter = [];
-  LocationFilter _selectedFilter =
-      LocationFilter(name: "All", isSelected: true);
+  List<String> _locationFilter = [];
+  String _selectedFilter = locationFilterAll;
+  String _searchQuery = "";
 
   LocationResponse? get locations => _locations;
 
@@ -25,17 +27,23 @@ class LocationProvider extends ChangeNotifier {
 
   List<Location?>? get filteredLocations => _filteredLocations;
 
-  List<LocationFilter>? get locationFilter => _locationFilter;
+  List<String>? get locationFilter => _locationFilter;
 
-  LocationFilter get selectedFilter => _selectedFilter;
+  String get selectedFilter => _selectedFilter;
 
-  Future loadData() async {
+  String get searchQuery => _searchQuery;
+
+  ///* fetching data from network and saved to a list. Also this method generates locations list for filter operation.
+  /// this function display location to ui
+  ///
+  Future _loadData() async {
     _isLoading = true;
     notifyListeners();
 
     try {
       _locations = await repository.getData();
       _filteredLocations = _locations?.locations;
+      _makeLocationFilter(_filteredLocations);
     } catch (e) {
       _errorMessage = e.toString();
     } finally {
@@ -44,39 +52,71 @@ class LocationProvider extends ChangeNotifier {
     }
   }
 
-  searchResults(String query) {
-    if (query.isNotEmpty) {
-      _filteredLocations = _locations?.locations
-          ?.where((item) =>
-              item!.location!.toLowerCase().contains(query.toLowerCase()))
-          .toList();
+  ///* generating location result after apply search query and filters based on user selection and search.
+  ///
+  fetchLocationsResult() {
+    if (_searchQuery.isNotEmpty) {
+      //search query is not empty.
+      if (selectedFilter == locationFilterAll) {
+        //checking search filter is 'All' or not.
+        //search filter is 'All'.
+        _filteredLocations = _locations?.locations
+            ?.where((item) => (item!.location!
+                .toLowerCase()
+                .contains(_searchQuery.toLowerCase())))
+            .toList();
+        //then no need to perform filter operation, then performing search only.
+      } else {
+        //search filter is not 'All' type.
+        //so applying filter and search operations.
+        _filteredLocations = _locations?.locations
+            ?.where((item) => (item!.location!
+                    .toLowerCase()
+                    .contains(_searchQuery.toLowerCase()) &&
+                (item.area == selectedFilter)))
+            .toList();
+      }
     } else {
-      _filteredLocations = _locations?.locations;
+      //search text is empty so no need to perform search operations.
+      if (selectedFilter == locationFilterAll) {
+        //checking search filter is 'All' or not.
+        //here search filter is 'All' type then showing all location.
+        _filteredLocations = _locations?.locations;
+      } else {
+        //here search filter is not 'All' type, then performing filter operation.
+        _filteredLocations = _locations?.locations
+            ?.where((item) => item?.area == selectedFilter)
+            .toList();
+      }
     }
     notifyListeners();
   }
 
-  applyFilter(LocationFilter filterItem) {
+  ///* updates selected filter
+  ///
+  applyFilter(String filterItem) {
     _selectedFilter = filterItem;
-    _filteredLocations =
-        _filteredLocations?.where((i) => i?.area == filterItem.name).toList();
   }
 
-  List<LocationFilter>? getLocationFilters() {
+  ///* updates search query
+  ///
+  applySearchQuery(String query) {
+    _searchQuery = query;
+  }
 
+  /// * generate and keep the the unique locations list for applying filter.
+  ///
+  _makeLocationFilter(List<Location?>? locations) {
     List<Location?>? _locations = [];
-
-    _locations.addAll(_filteredLocations!);
-
-    if (_locations.isNotEmpty) {
-      final ids = _filteredLocations?.map((location) => location?.area).toSet();
-      _locations.retainWhere((x) => ids!.remove(x?.area));
-      List<LocationFilter> filters = [LocationFilter(name: 'All')];
+    _locations.addAll(locations!);
+    if (_locations!.isNotEmpty) {
+      final ids = _locations.map((location) => location?.area).toSet();
+      _locations.retainWhere((x) => ids.remove(x?.area));
+      List<String> filters = [locationFilterAll];
       for (var location in _locations) {
-        filters.add(LocationFilter(name: location?.area));
+        filters.add(location?.area ?? '');
       }
-      return filters;
-      print("filters: ${filters.toString()}");
+      _locationFilter = filters;
     }
   }
 }

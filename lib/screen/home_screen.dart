@@ -23,7 +23,7 @@ class MyHomePageState extends State<MyHomePage> {
 
   Future<void> _showFilters(
       BuildContext context, LocationProvider dataProvider) async {
-    int? result = await showModalBottomSheet(
+    await showModalBottomSheet(
       context: context,
       isScrollControlled: true,
       isDismissible: true,
@@ -31,38 +31,37 @@ class MyHomePageState extends State<MyHomePage> {
         borderRadius: BorderRadius.vertical(top: Radius.circular(15)),
       ),
       builder: (context) => DraggableScrollableSheet(
-          initialChildSize: 0.4,
-          minChildSize: 0.2,
-          maxChildSize: 0.9,
-          expand: false,
-          builder: (context, scrollController) {
-            final locationFilters = dataProvider.getLocationFilters();
-
-            return SafeArea(
-              child: ListView.builder(
-                  controller: scrollController,
-                  itemCount: locationFilters?.length,
-                  itemBuilder: (context, index) {
-                    final location = locationFilters?[index];
-                    return Column(children: [
-                      ListTile(
-                        trailing:
-                            dataProvider.selectedFilter.name == location?.name
-                                ? const Icon(Icons.brightness_low_sharp)
-                                : const SizedBox.shrink(),
-                        title: Text(location?.name ?? ""),
-                        onTap: () {
-                          dataProvider.applyFilter(location!);
-                          Navigator.of(context).pop(index);
-                        },
-                      ),
-                      Divider()
-                    ]);
-                  }),
-            );
-          }),
+        initialChildSize: 0.4,
+        minChildSize: 0.2,
+        maxChildSize: 0.9,
+        expand: false,
+        builder: (context, scrollController) => SafeArea(
+          child: ListView.builder(
+              controller: scrollController,
+              itemCount: dataProvider.locationFilter?.length,
+              itemBuilder: (context, index) {
+                final location = dataProvider.locationFilter?[index];
+                return Column(children: [
+                  ListTile(
+                    trailing: dataProvider.selectedFilter == location
+                        ? const Icon(
+                            Icons.check,
+                            color: Colors.black,
+                          )
+                        : const SizedBox.shrink(),
+                    title: Text(location ?? ""),
+                    onTap: () {
+                      dataProvider.applyFilter(location!);
+                      dataProvider.fetchLocationsResult();
+                      Navigator.of(context).pop(index);
+                    },
+                  ),
+                  Divider()
+                ]);
+              }),
+        ),
+      ),
     );
-    print(result);
   }
 
   @override
@@ -119,16 +118,18 @@ class MyHomePageState extends State<MyHomePage> {
                                                 ),
                                                 hintText: 'Search here...'),
                                             onChanged: (query) {
-                                              dataProvider.searchResults(query);
+                                              dataProvider
+                                                  .applySearchQuery(query);
+                                              dataProvider
+                                                  .fetchLocationsResult();
                                             },
                                           ),
                                         ),
                                         TextButton(
                                           onPressed: () {
-                                            dataProvider.applyFilter(
-                                                LocationFilter(
-                                                    name: 'All',
-                                                    isSelected: true));
+                                            dataProvider
+                                                .applyFilter(locationFilterAll);
+                                            dataProvider.fetchLocationsResult();
                                           },
                                           style: TextButton.styleFrom(
                                               padding: EdgeInsets.zero,
