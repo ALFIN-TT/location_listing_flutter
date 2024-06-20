@@ -36,7 +36,6 @@ class LocationProvider extends ChangeNotifier {
     try {
       _locations = await repository.getData();
       _filteredLocations = _locations?.locations;
-      _makeLocationFilter(_filteredLocations);
     } catch (e) {
       _errorMessage = e.toString();
     } finally {
@@ -63,18 +62,20 @@ class LocationProvider extends ChangeNotifier {
         _filteredLocations?.where((i) => i?.area == filterItem.name).toList();
   }
 
-  _makeLocationFilter(List<Location?>? locations) {
+  List<LocationFilter>? getLocationFilters() {
+
     List<Location?>? _locations = [];
-    _locations.addAll(locations!);
-    print("locations: $_locations");
-    if (_locations!.isNotEmpty) {
-      final ids = _locations.map((location) => location?.area).toSet();
-      _locations.retainWhere((x) => ids.remove(x?.area));
+
+    _locations.addAll(_filteredLocations!);
+
+    if (_locations.isNotEmpty) {
+      final ids = _filteredLocations?.map((location) => location?.area).toSet();
+      _locations.retainWhere((x) => ids!.remove(x?.area));
       List<LocationFilter> filters = [LocationFilter(name: 'All')];
       for (var location in _locations) {
         filters.add(LocationFilter(name: location?.area));
       }
-      _locationFilter = filters;
+      return filters;
       print("filters: ${filters.toString()}");
     }
   }

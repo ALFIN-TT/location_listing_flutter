@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_assignment/data/models/location_response.dart';
+import 'package:flutter_assignment/screen/location_details_screen.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
@@ -30,32 +31,36 @@ class MyHomePageState extends State<MyHomePage> {
         borderRadius: BorderRadius.vertical(top: Radius.circular(15)),
       ),
       builder: (context) => DraggableScrollableSheet(
-        initialChildSize: 0.4,
-        minChildSize: 0.2,
-        maxChildSize: 0.9,
-        expand: false,
-        builder: (context, scrollController) => SafeArea(
-          child: ListView.builder(
-              controller: scrollController,
-              itemCount: dataProvider.locationFilter?.length,
-              itemBuilder: (context, index) {
-                final location = dataProvider.locationFilter?[index];
-                return Column(children: [
-                  ListTile(
-                    trailing: dataProvider.selectedFilter.name == location?.name
-                        ? const Icon(Icons.brightness_low_sharp)
-                        : const SizedBox.shrink(),
-                    title: Text(location?.name ?? ""),
-                    onTap: () {
-                      dataProvider.applyFilter(location!);
-                      Navigator.of(context).pop(index);
-                    },
-                  ),
-                  Divider()
-                ]);
-              }),
-        ),
-      ),
+          initialChildSize: 0.4,
+          minChildSize: 0.2,
+          maxChildSize: 0.9,
+          expand: false,
+          builder: (context, scrollController) {
+            final locationFilters = dataProvider.getLocationFilters();
+
+            return SafeArea(
+              child: ListView.builder(
+                  controller: scrollController,
+                  itemCount: locationFilters?.length,
+                  itemBuilder: (context, index) {
+                    final location = locationFilters?[index];
+                    return Column(children: [
+                      ListTile(
+                        trailing:
+                            dataProvider.selectedFilter.name == location?.name
+                                ? const Icon(Icons.brightness_low_sharp)
+                                : const SizedBox.shrink(),
+                        title: Text(location?.name ?? ""),
+                        onTap: () {
+                          dataProvider.applyFilter(location!);
+                          Navigator.of(context).pop(index);
+                        },
+                      ),
+                      Divider()
+                    ]);
+                  }),
+            );
+          }),
     );
     print(result);
   }
@@ -120,15 +125,18 @@ class MyHomePageState extends State<MyHomePage> {
                                         ),
                                         TextButton(
                                           onPressed: () {
-                                            dataProvider.applyFilter(LocationFilter(name: 'All', isSelected: true));
+                                            dataProvider.applyFilter(
+                                                LocationFilter(
+                                                    name: 'All',
+                                                    isSelected: true));
                                           },
-                                          child: Text('All'),
                                           style: TextButton.styleFrom(
                                               padding: EdgeInsets.zero,
                                               minimumSize: Size(30, 30),
                                               tapTargetSize:
                                                   MaterialTapTargetSize.padded,
                                               alignment: Alignment.center),
+                                          child: Text('All'),
                                         ),
                                         IconButton(
                                             icon: const Icon(
@@ -175,6 +183,15 @@ class MyHomePageState extends State<MyHomePage> {
                                                   ),
                                                   trailing: const Icon(Icons
                                                       .keyboard_arrow_right_rounded),
+                                                  onTap: () {
+                                                    Navigator.push(
+                                                        context,
+                                                        MaterialPageRoute(
+                                                            builder: (context) =>
+                                                                LocationDetailsPage(
+                                                                    location:
+                                                                        location!)));
+                                                  },
                                                 ),
                                                 const Divider()
                                               ]);
