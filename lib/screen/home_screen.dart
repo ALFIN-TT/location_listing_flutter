@@ -29,6 +29,8 @@ class MyHomePageState extends State<MyHomePage> {
 }
 
 class HomePageBody extends StatefulWidget {
+  const HomePageBody({super.key});
+
   @override
   State<StatefulWidget> createState() => HomePageBodyState();
 }
@@ -65,7 +67,7 @@ class HomePageBodyState extends State<HomePageBody> {
 class SearchAndFilterRow extends StatefulWidget {
   final LocationProvider dataProvider;
 
-  SearchAndFilterRow({required this.dataProvider, super.key});
+  const SearchAndFilterRow({required this.dataProvider, super.key});
 
   @override
   State<StatefulWidget> createState() =>
@@ -169,7 +171,7 @@ class SearchAndFilterRowState extends State<SearchAndFilterRow> {
 class LocationsList extends StatelessWidget {
   final LocationProvider dataProvider;
 
-  LocationsList({required this.dataProvider, super.key});
+  const LocationsList({required this.dataProvider, super.key});
 
   @override
   Widget build(BuildContext context) {

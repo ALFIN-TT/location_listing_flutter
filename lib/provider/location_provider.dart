@@ -54,7 +54,7 @@ class LocationProvider extends ChangeNotifier {
 
   ///* generating location result after apply search query and filters based on user selection and search.
   ///
-  fetchLocationsResult({String? query = null, String? filterItem = null}) {
+  fetchLocationsResult({String? query, String? filterItem}) {
     if (query != null) _searchQuery = query;
     if (filterItem != null) _selectedFilter = filterItem;
     if (_searchQuery.isNotEmpty) {

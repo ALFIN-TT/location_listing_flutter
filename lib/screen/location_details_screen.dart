@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_assignment/data/models/location_response.dart';
 import 'package:flutter_assignment/screen/widgets/common_app_bar.dart';
+import 'package:flutter_assignment/util/util.dart';
 
 class LocationDetailsPage extends StatelessWidget {
   const LocationDetailsPage({super.key, required this.location});
@@ -16,7 +17,7 @@ class LocationDetailsPage extends StatelessWidget {
 }
 
 class LocationDetailsPageBody extends StatelessWidget {
-  const LocationDetailsPageBody({super.key, required this.location});
+  LocationDetailsPageBody({super.key, required this.location});
 
   final Location location;
 
@@ -31,21 +32,34 @@ class LocationDetailsPageBody extends StatelessWidget {
           trailing: const Icon(Icons.home_work_outlined),
         ),
         ListTile(
-          title: const Text('Location'),
-          subtitle: Text(
-            '${location.geo} - ${location.area}',
-          ),
-          trailing: const Icon(Icons.location_pin),
-        ),
+            title: const Text('Location'),
+            subtitle: Text(
+              '${location.geo} - ${location.area}',
+            ),
+            trailing: const Icon(Icons.location_pin),
+            onTap: () {
+              final geometry = location.geometry;
+              if (geometry != null) {
+                try {
+                  openInMap(geometry.lat!, geometry.lng!);
+                } catch (e) {}
+              }
+            }),
+        if (location.phone?.isNotEmpty == true)
+          ListTile(
+              title: const Text('Phone'),
+              subtitle: Text(location.phone!),
+              trailing: const Icon(Icons.phone),
+              onTap: () {
+                openPhone(location.phone!);
+              }),
         ListTile(
-          title: Text('Phone'),
-          subtitle: Text(location.phone ?? 'N/A'),
-          trailing: Icon(Icons.phone),
-        ),
-        ListTile(
-          title: Text('Email'),
+          title: const Text('Email'),
           subtitle: Text(location.email ?? 'N/A'),
-          trailing: Icon(Icons.email),
+          trailing: const Icon(Icons.email),
+          onTap: () {
+            openEmail(location.email!);
+          },
         ),
         ListTile(
           title: Text('Address'),
