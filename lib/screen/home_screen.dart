@@ -51,7 +51,7 @@ class HomePageBodyState extends State<HomePageBody> {
                               SearchAndFilterRow(dataProvider: dataProvider),
                               if (dataProvider.filteredLocations?.isEmpty ==
                                   true)
-                                 const Expanded(
+                                const Expanded(
                                     child: Center(
                                   child: Text('No result found!'),
                                 ))
@@ -109,8 +109,7 @@ class SearchAndFilterRowState extends State<SearchAndFilterRow> {
                         : const SizedBox.shrink(),
                     title: Text(location ?? ""),
                     onTap: () {
-                      dataProvider.applyFilter(location!);
-                      dataProvider.fetchLocationsResult();
+                      dataProvider.fetchLocationsResult(filterItem: location);
                       Navigator.of(context).pop(index);
                     },
                   ),
@@ -142,15 +141,13 @@ class SearchAndFilterRowState extends State<SearchAndFilterRow> {
                   ),
                   hintText: 'Search here...'),
               onChanged: (query) {
-                dataProvider.applySearchQuery(query);
-                dataProvider.fetchLocationsResult();
+                dataProvider.fetchLocationsResult(query: query);
               },
             ),
           ),
           TextButton(
             onPressed: () {
-              dataProvider.applyFilter(locationFilterAll);
-              dataProvider.fetchLocationsResult();
+              dataProvider.fetchLocationsResult(filterItem: locationFilterAll);
             },
             style: TextButton.styleFrom(
                 minimumSize: const Size(40, 40),

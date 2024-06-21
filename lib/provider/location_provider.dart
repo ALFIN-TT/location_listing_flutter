@@ -54,7 +54,9 @@ class LocationProvider extends ChangeNotifier {
 
   ///* generating location result after apply search query and filters based on user selection and search.
   ///
-  fetchLocationsResult() {
+  fetchLocationsResult({String? query = null, String? filterItem = null}) {
+    if (query != null) _searchQuery = query;
+    if (filterItem != null) _selectedFilter = filterItem;
     if (_searchQuery.isNotEmpty) {
       //search query is not empty.
       if (selectedFilter == locationFilterAll) {
@@ -90,18 +92,6 @@ class LocationProvider extends ChangeNotifier {
       }
     }
     notifyListeners();
-  }
-
-  ///* updates selected filter
-  ///
-  applyFilter(String filterItem) {
-    _selectedFilter = filterItem;
-  }
-
-  ///* updates search query
-  ///
-  applySearchQuery(String query) {
-    _searchQuery = query;
   }
 
   /// * generate and keep the the unique locations list for applying filter.
