@@ -114,7 +114,7 @@ class SearchAndFilterRowState extends State<SearchAndFilterRow> {
                       Navigator.of(context).pop(index);
                     },
                   ),
-                  Divider()
+                  const Divider()
                 ]);
               }),
         ),
@@ -133,7 +133,7 @@ class SearchAndFilterRowState extends State<SearchAndFilterRow> {
               controller: searchTextEditingController,
               decoration: const InputDecoration(
                   contentPadding:
-                      EdgeInsets.only(left: 12, top: 12, right: 2, bottom: 12),
+                      EdgeInsets.only(left: 12, top: 12, right: 5, bottom: 12),
                   focusedBorder: OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.black, width: 2.0),
                   ),
@@ -153,11 +153,10 @@ class SearchAndFilterRowState extends State<SearchAndFilterRow> {
               dataProvider.fetchLocationsResult();
             },
             style: TextButton.styleFrom(
-                padding: EdgeInsets.zero,
-                minimumSize: Size(30, 30),
+                minimumSize: const Size(40, 40),
                 tapTargetSize: MaterialTapTargetSize.padded,
                 alignment: Alignment.center),
-            child: Text('All'),
+            child: const Text('All'),
           ),
           IconButton(
               icon: const Icon(Icons.filter_list_outlined),
