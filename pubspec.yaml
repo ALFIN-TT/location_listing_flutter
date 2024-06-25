@@ -45,6 +45,8 @@ dev_dependencies:
     sdk: flutter
   build_runner: ^2.1.7
   json_serializable: ^6.8.0
+  flutter_native_splash: ^2.3.13
+  url_launcher: ^6.1.11
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
@@ -66,6 +68,16 @@ flutter:
 
   assets:
     - assets/images/tcs_logo.png
+flutter_native_splash:
+  android: true
+  ios: true
+  web: false
+  image: assets/images/tcs_logo.png
+  color: "#FFFFFF"
+  android_12:
+    image: assets/images/tcs_logo.png
+    color: "#FFFFFF"
+
 
   # To add assets to your application, add an assets section, like this:
   # assets:
