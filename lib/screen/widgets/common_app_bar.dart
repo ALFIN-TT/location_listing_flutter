@@ -9,7 +9,6 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      backgroundColor: Theme.of(context).colorScheme.inversePrimary,
       title: Text(title,
           style: GoogleFonts.poppins(
               color: Colors.white, fontWeight: FontWeight.w500)),
