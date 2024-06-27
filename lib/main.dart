@@ -26,8 +26,12 @@ class MyApp extends StatelessWidget {
         child: MaterialApp(
           title: 'TCS Locator',
           theme: ThemeData(
-            colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
             useMaterial3: true,
+            appBarTheme: const AppBarTheme(
+              color: Colors.black,
+              iconTheme: IconThemeData(color: Colors.white),
+            ),
+            colorScheme: ColorScheme.fromSeed(seedColor: Colors.black),
           ),
           debugShowCheckedModeBanner: false,
           home: const MyHomePage(title: 'TCS Locator'),

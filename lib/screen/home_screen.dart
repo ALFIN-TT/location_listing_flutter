@@ -41,8 +41,7 @@ class HomePageBodyState extends State<HomePageBody> {
     return Consumer<LocationProvider>(
         builder: (context, dataProvider, child) => Center(
             child: dataProvider.isLoading
-                ? CircularProgressIndicator(
-                    color: Theme.of(context).colorScheme.inversePrimary)
+                ? CircularProgressIndicator()
                 : dataProvider.errorMessage.isNotEmpty
                     ? Text(dataProvider.errorMessage)
                     : dataProvider.locations != null

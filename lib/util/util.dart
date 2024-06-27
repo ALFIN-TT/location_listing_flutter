@@ -28,3 +28,5 @@ void openInMap(double lat, double lon) async {
     throw Exception('Could not launch $url');
   }
 }
+
+
