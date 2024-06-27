@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_assignment/data/models/location_response.dart';
-import 'package:flutter_assignment/screen/location_details_screen.dart';
-import 'package:flutter_assignment/screen/widgets/common_app_bar.dart';
+import 'package:flutter_assignment/screens/details_page.dart';
+import 'package:flutter_assignment/screens/widgets/common_app_bar.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
@@ -41,7 +41,7 @@ class HomePageBodyState extends State<HomePageBody> {
     return Consumer<LocationProvider>(
         builder: (context, dataProvider, child) => Center(
             child: dataProvider.isLoading
-                ? CircularProgressIndicator()
+                ? const CircularProgressIndicator(backgroundColor: Colors.black)
                 : dataProvider.errorMessage.isNotEmpty
                     ? Text(dataProvider.errorMessage)
                     : dataProvider.locations != null
@@ -153,6 +153,7 @@ class SearchAndFilterRowState extends State<SearchAndFilterRow> {
             style: TextButton.styleFrom(
                 minimumSize: const Size(40, 40),
                 tapTargetSize: MaterialTapTargetSize.padded,
+                textStyle: const TextStyle(color: Colors.black),
                 alignment: Alignment.center),
             child: const Text('All'),
           ),
@@ -202,7 +203,7 @@ class LocationsList extends StatelessWidget {
                         context,
                         MaterialPageRoute(
                             builder: (context) =>
-                                LocationDetailsPage(location: location!)));
+                                DetailsPage(location: location!)));
                   },
                 ),
                 const Divider()

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_assignment/provider/location_provider.dart';
-import 'package:flutter_assignment/screen/home_screen.dart';
+import 'package:flutter_assignment/screens/home_page.dart';
 import 'package:provider/provider.dart';
 
 import 'data/api/api_service.dart';
